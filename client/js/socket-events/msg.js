@@ -17,11 +17,20 @@ socket.on("msg", function(data) {
 });
 
 function processReceivedMessage(data) {
-	const targetId = data.chan;
-	const target = "#chan-" + targetId;
-	const channel = chat.find(target);
-	const container = channel.find(".messages");
+	let targetId = data.chan;
+	let target = "#chan-" + targetId;
+	let channel = chat.find(target);
 
+	// Display received notices and errors in currently active channel,
+	// if the actual target is the network lobby.
+	// Reloading the page will put them back into the lobby window.
+	if (data.msg.showInActive) {
+		targetId = data.chan = chat.find(".active").data("id");
+		target = "#chan-" + targetId;
+		channel = chat.find(target);
+	}
+
+	const container = channel.find(".messages");
 	const activeChannelId = chat.find(".chan.active").data("id");
 
 	if (data.msg.type === "channel_list" || data.msg.type === "ban_list") {
@@ -64,7 +73,7 @@ function processReceivedMessage(data) {
 		});
 	}
 
-	if ((data.msg.type === "message" || data.msg.type === "action" || data.msg.type === "notice") && channel.hasClass("channel")) {
+	if ((data.msg.type === "message" || data.msg.type === "action") && channel.hasClass("channel")) {
 		const nicks = channel.find(".users").data("nicks");
 		if (nicks) {
 			const find = nicks.indexOf(data.msg.from);
