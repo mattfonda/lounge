@@ -237,7 +237,6 @@ function initializeClient(socket, client, token, lastMessage) {
 	socket.on("disconnect", function() {
 		client.clientDetach(socket.id);
 	});
-	client.clientAttach(socket.id, token);
 
 	socket.on(
 		"input",
@@ -426,6 +425,8 @@ function initializeClient(socket, client, token, lastMessage) {
 	socket.join(client.id);
 
 	const sendInitEvent = (tokenToSend) => {
+		client.clientAttach(socket.id, token);
+
 		let networks = client.networks;
 
 		if (lastMessage > -1) {
