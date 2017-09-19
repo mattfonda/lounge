@@ -75,12 +75,14 @@ const actionTypes = [
 	"action",
 	"whois",
 	"ctcp",
+	"chghost",
 	"channel_list",
 ];
 
 const condensedTypes = [
 	"away",
 	"back",
+	"chghost",
 	"join",
 	"part",
 	"quit",
