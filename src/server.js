@@ -15,6 +15,7 @@ var colors = require("colors/safe");
 const net = require("net");
 const Identification = require("./identification");
 const themes = require("./plugins/themes");
+const packages = require("./plugins/packages");
 
 // The order defined the priority: the first available plugin is used
 // ALways keep local auth in the end, which should always be enabled.
@@ -62,6 +63,12 @@ module.exports = function() {
 			return res.status(404).send("Not found");
 		}
 		return res.sendFile(theme);
+	});
+
+	app.get("/packages/:package/:style.css", (req, res) => {
+		const packageName = req.params.package;
+		const filename = Helper.getPackageModulePath(packageName);
+		return res.sendFile(path.join(filename, req.params.style + ".css"));
 	});
 
 	var config = Helper.config;
@@ -207,6 +214,8 @@ function index(req, res, next) {
 		pkg,
 		Helper.config
 	);
+
+	data.customCss = packages.getCustomCss();
 	data.gitCommit = Helper.getGitCommit();
 	data.themes = themes.getAll();
 

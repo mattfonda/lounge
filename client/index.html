@@ -10,6 +10,9 @@
 	<link rel="stylesheet" href="css/bootstrap.css">
 	<link rel="stylesheet" href="css/style.css">
 	<link id="theme" rel="stylesheet" href="{{ theme }}">
+	{{#each customCss}}
+		<link rel="stylesheet" href="/packages/{{ this }}">
+	{{/each}}
 	<style id="user-specified-css"></style>
 
 	<title>The Lounge</title>
